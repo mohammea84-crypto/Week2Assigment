@@ -133,3 +133,50 @@ with torch.no_grad():
     preds = model(X_test_t).argmax(dim=1).numpy()
 nn_accuracy = accuracy_score(y_test[:1000], preds)
 print(f"Neural Network Accuracy: {nn_accuracy:.4f}")
+
+
+
+# ============================================================
+# Step 5: Compare Classifier Performance
+# Commit: "Compared classifier performance"
+# ============================================================
+
+# --- Output 1: Bar chart comparison ---
+models      = ["SVM", "Softmax", "Neural Network"]
+accuracies  = [svm_accuracy, softmax_accuracy, nn_accuracy]
+colors      = ["steelblue", "tomato", "seagreen"]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+bars = ax.bar(models, accuracies, color=colors, width=0.5)
+ax.set_ylabel("Accuracy", fontsize=12)
+ax.set_title("Classifier Performance Comparison", fontsize=13, fontweight='bold')
+ax.set_ylim(0, 1.1)
+for bar, acc in zip(bars, accuracies):
+    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.02,
+            f"{acc:.2%}", ha='center', fontsize=11, fontweight='bold')
+plt.tight_layout()
+plt.savefig("accuracy_comparison.png", dpi=120)
+plt.close()
+print("Saved: accuracy_comparison.png")
+
+# --- Output 2: Confusion matrix (Neural Network) ---
+cm = confusion_matrix(y_test[:1000], preds)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+fig, ax = plt.subplots(figsize=(5, 4))
+disp.plot(ax=ax, colorbar=False, cmap="Blues")
+ax.set_title("Confusion Matrix — Neural Network", fontsize=12, fontweight='bold')
+plt.tight_layout()
+plt.savefig("confusion_matrix.png", dpi=120)
+plt.close()
+print("Saved: confusion_matrix.png")
+
+# --- Output 3: Summary table (CSV) ---
+results = pd.DataFrame({
+    "Model":    models,
+    "Accuracy": [f"{a:.4f}" for a in accuracies],
+    "Accuracy %": [f"{a:.2%}" for a in accuracies],
+})
+results.to_csv("results_summary.csv", index=False)
+print("Saved: results_summary.csv")
+print("\n=== Final Results ===")
+print(results.to_string(index=False))
