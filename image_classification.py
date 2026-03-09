@@ -86,3 +86,50 @@ softmax.fit(X_train[:3000], y_train[:3000])
 y_pred_softmax = softmax.predict(X_test[:1000])
 softmax_accuracy = accuracy_score(y_test[:1000], y_pred_softmax)
 print(f"Softmax Accuracy: {softmax_accuracy:.4f}")
+
+
+
+# ---- 4c: Two-layer Neural Network ----
+# Commit: "Implemented Two-layer Neural Network classifier"
+class TwoLayerNN(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(TwoLayerNN, self).__init__()
+        self.fc1     = nn.Linear(input_size, hidden_size)
+        self.relu    = nn.ReLU()
+        self.fc2     = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        return x
+
+input_size  = 32 * 32 * 3
+hidden_size = 128
+output_size = len(selected_classes)
+
+model     = TwoLayerNN(input_size, hidden_size, output_size)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Normalize pixel values and convert to tensors
+X_train_t = torch.tensor(X_train[:3000] / 255.0, dtype=torch.float32)
+y_train_t = torch.tensor(y_train[:3000], dtype=torch.long)
+X_test_t  = torch.tensor(X_test[:1000]  / 255.0, dtype=torch.float32)
+
+print("Training Neural Network (10 epochs)...")
+for epoch in range(10):
+    optimizer.zero_grad()
+    outputs = model(X_train_t)
+    loss = criterion(outputs, y_train_t)
+    loss.backward()
+    optimizer.step()
+    if (epoch + 1) % 5 == 0:
+        print(f"  Epoch {epoch+1}/10 | Loss: {loss.item():.4f}")
+
+# Evaluate NN
+model.eval()
+with torch.no_grad():
+    preds = model(X_test_t).argmax(dim=1).numpy()
+nn_accuracy = accuracy_score(y_test[:1000], preds)
+print(f"Neural Network Accuracy: {nn_accuracy:.4f}")
