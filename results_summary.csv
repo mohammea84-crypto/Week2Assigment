@@ -1,0 +1,4 @@
+Model,Accuracy,Accuracy %
+SVM,0.6050,60.50%
+Softmax,0.5830,58.30%
+Neural Network,0.4100,41.00%

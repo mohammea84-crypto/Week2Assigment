@@ -1,0 +1,18 @@
+# Image Classification — CIFAR-10 (Week 2 Assignment)
+
+Compares SVM, Softmax, and a Two-layer Neural Network on a 3-class subset of CIFAR-10.
+
+## How to Run
+
+```bash
+pip install -r requirements.txt
+python image_classification.py
+```
+
+## Output Files
+| File | Description |
+|---|---|
+| `sample_images.png` | Grid of sample dataset images |
+| `accuracy_comparison.png` | Bar chart comparing all 3 models |
+| `confusion_matrix.png` | Confusion matrix for the Neural Network |
+| `results_summary.csv` | Accuracy table for all models |
