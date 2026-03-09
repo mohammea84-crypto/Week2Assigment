@@ -56,3 +56,23 @@ plt.tight_layout()
 plt.savefig("sample_images.png", dpi=120)
 plt.close()
 print("Saved: sample_images.png")
+
+
+# ============================================================
+# Step 4: Implement Classification Models
+# ============================================================
+
+# Flatten images: 32x32x3 → 3072
+X_train = trainset.data.reshape(len(trainset.data), -1)
+y_train = trainset.targets
+X_test  = testset.data.reshape(len(testset.data), -1)
+y_test  = testset.targets
+
+# ---- 4a: SVM Classifier ----
+# Commit: "Implemented SVM classifier"
+print("Training SVM...")
+svm = SVC(kernel='linear')
+svm.fit(X_train[:3000], y_train[:3000])   # subset for speed
+y_pred_svm = svm.predict(X_test[:1000])
+svm_accuracy = accuracy_score(y_test[:1000], y_pred_svm)
+print(f"SVM Accuracy: {svm_accuracy:.4f}")
