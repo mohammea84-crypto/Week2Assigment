@@ -76,3 +76,13 @@ svm.fit(X_train[:3000], y_train[:3000])   # subset for speed
 y_pred_svm = svm.predict(X_test[:1000])
 svm_accuracy = accuracy_score(y_test[:1000], y_pred_svm)
 print(f"SVM Accuracy: {svm_accuracy:.4f}")
+
+
+# ---- 4b: Softmax Classifier ----
+# Commit: "Implemented Softmax classifier"
+print("Training Softmax (Logistic Regression)...")
+softmax = LogisticRegression(multi_class='multinomial', solver='lbfgs', max_iter=1000)
+softmax.fit(X_train[:3000], y_train[:3000])
+y_pred_softmax = softmax.predict(X_test[:1000])
+softmax_accuracy = accuracy_score(y_test[:1000], y_pred_softmax)
+print(f"Softmax Accuracy: {softmax_accuracy:.4f}")
